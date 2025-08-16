@@ -21,6 +21,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -29,12 +32,19 @@ jobs:
       - name: Generate docs (index.html)
         run: |
           python scripts/gen_docs.py
+          test -f index.html || (echo "index.html not generated" && exit 1)
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # ✅ 上传“仓库根目录”，其中应包含 gen_docs.py 写出的 index.html / assets/
-          path: .
+          # 只上传站点需要的内容（多行列表）
+          path: |
+            index.html
+            assets
+            videos
+            figures/schematics
+            src
+            README.md
 
   deploy:
     needs: build
