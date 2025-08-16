@@ -37,14 +37,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # 只上传站点需要的内容（多行列表）
-          path: |
-            index.html
-            assets
-            videos
-            figures/schematics
-            src
-            README.md
+          # 只能传一个目录；这里传根目录（和 mbe3 一样）
+          path: .
 
   deploy:
     needs: build
