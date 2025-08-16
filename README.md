@@ -1,20 +1,18 @@
-# Rydberg Polaritons: Time-Evolution & Relative-Phase Dynamics
+# Rydberg Polaritons: Time-Evolution & Relative-Phase Dynamics (MATLAB)
 
-Minimal repository showcasing numerical visualizations of relative-phase evolution for two and three Rydberg polaritons in a quasi-1D medium under blockade. Assets include short simulation videos and matching schematic figures.
+MATLAB scripts for simulating and visualizing the relative-phase evolution of two and three Rydberg polaritons in quasi-1D and 2D media under Rydberg blockade. The repository also includes two schematic figures and two short MP4 clips.
 
-## Contents
-- `.github/workflows/` — CI configuration (e.g., Pages build).
-- `figures/schematics/` — Schematic diagrams matching the videos (PNG/SVG), showing geometry, blockade radius R_b, centers z_i, and group velocities v_gi.
-- `scripts/` — Lightweight utilities (e.g., `gen_docs.py`) for organizing assets or generating docs.
-- `thesis/` — Project write-up and notes (placeholder).
-- `videos/` — MP4 clips:
-  - `Relative-Phase Evolution of Two Rydberg Polaritons.mp4`
-  - `Relative-Phase Evolution of Three Rydberg Polaritons.mp4`
+## Layout
+- `src/` — MATLAB `.m` scripts (1D/2D; two/three polaritons).
+- `figures/schematics/` — schematic PNGs.
+- `videos/` — MP4 clips.
+- `scripts/gen_docs.py` — generates `index.html` for GitHub Pages.
 
-## Notes
-- File stems are consistent between videos and figures (images use the same stem with `_schematic`).
-- PNG provided for GitHub preview; SVG recommended for print/latex.
+## Requirements
+- MATLAB R2021b or newer.
 
-## Attribution
-If these materials are useful, please cite:  
-Liu, K. (2025). *Rydberg-polaritons relative-phase dynamics (visualization assets)*.
+## Quick start
+1. Add the source directory and run a script:
+   ```matlab
+   addpath('src');
+   oned_twop_allm_v4;    % 1D, two polaritons (example)
