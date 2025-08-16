@@ -31,13 +31,16 @@ jobs:
 
       - name: Generate docs (index.html)
         run: |
+          set -e
+          python --version
           python scripts/gen_docs.py
+          ls -la
           test -f index.html || (echo "index.html not generated" && exit 1)
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # 只能传一个目录；这里传根目录（和 mbe3 一样）
+          # 上传根目录（和 mbe3 一样）
           path: .
 
   deploy:
