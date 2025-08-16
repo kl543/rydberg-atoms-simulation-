@@ -40,7 +40,6 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # 上传根目录（和 mbe3 一样）
           path: .
 
   deploy:
