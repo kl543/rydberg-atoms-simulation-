@@ -223,11 +223,25 @@ def _build_ok() -> str:
     srcs  = _list_src()
     pairs = _pair_overview(figs, vids)
 
+    # --- collect files used in Overview to avoid duplicates later ---
+    used_figs = {it["fig"] for it in pairs if it.get("fig")}
+    used_vids = {it["vid"] for it in pairs if it.get("vid")}
+    figs_rest = [p for p in figs if p not in used_figs]
+    vids_rest = [p for p in vids if p not in used_vids]
+
     out = [header, '<main class="container">']
-    out.append(_sec_overview(pairs))
-    out.append(_sec_list("Schematics", figs, "grid"))
-    out.append(_sec_list("Videos", vids, "videos"))
-    out.append(_sec_list("Source Code (MATLAB, src/)", srcs, "list"))
+    # Overview (always if available)
+    if pairs:
+        out.append(_sec_overview(pairs))
+    # Only show remaining items; skip empty sections to avoid duplication
+    if figs_rest:
+        out.append(_sec_list("Schematics", figs_rest, "grid"))
+    if vids_rest:
+        out.append(_sec_list("Videos", vids_rest, "videos"))
+    # MATLAB sources are unique anyway
+    if srcs:
+        out.append(_sec_list("Source Code (MATLAB, src/)", srcs, "list"))
+
     out.append(f'<div class="center muted" style="margin:24px 0;">Last updated: {now} — {OWNER}/{REPO_NAME}@{BRANCH}</div>')
     out.append('</main></body></html>')
     return "\n".join(out)
