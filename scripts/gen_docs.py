@@ -10,8 +10,7 @@ Generate a minimal static index.html for GitHub Pages.
   corresponding videos when available.
 - Writes assets/style.css and .nojekyll to keep Pages simple.
 
-This script is CI-safe: even if something goes wrong, it still writes an index.html
-containing the error logs so the Pages artifact is present.
+CI-safe: even if something goes wrong, still writes index.html with logs.
 """
 
 import os
@@ -35,8 +34,6 @@ FIG_DIR  = ROOT / "figures" / "schematics"
 VID_DIR  = ROOT / "videos"
 SRC_DIR  = ROOT / "src"
 
-# If you have a parent site header, you can place _site-header.html at repo root
-# or in the parent folder; otherwise a fallback header is used.
 def _q(p: Path | str) -> str:
     """URL-encode a path but keep slashes and common filename chars."""
     if isinstance(p, Path):
@@ -66,15 +63,36 @@ header{background:#111;color:#fff;padding:30px 16px;text-align:center}
 .container{max-width:1040px;margin:24px auto;padding:0 16px}
 .muted{color:#666}
 .card{border:1px solid #e9e9e9;border-radius:16px;padding:16px 18px;margin:16px 0;background:#fff}
+
+/* Grid for the Schematics section */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
 .thumb{border:1px solid #e9e9e9;border-radius:12px;padding:6px;background:#fff}
-.thumb img{width:100%;border-radius:8px;display:block}
+.thumb img{width:100%;height:auto;border-radius:8px;display:block}
+
 .btn{display:inline-block;border:1px solid #e9e9e9;padding:8px 12px;border-radius:10px;text-decoration:none;color:#111;background:#fafafa}
 .btn:hover{background:#f3f3f3}
+
 video.player{width:100%;height:auto;border:1px solid #e9e9e9;border-radius:12px;background:#000}
 .center{text-align:center}
 h2{margin:18px 0 10px}
 h3{margin:.2rem 0 .5rem}
+
+/* --- shrink big media (Overview & Videos) --- */
+/* Limit width and center for non-grid media */
+.card > .thumb{
+  max-width: clamp(320px, 90vw, 760px);
+  margin:12px auto;
+}
+video.player{
+  max-width: clamp(320px, 90vw, 760px);
+  display:block;
+  margin:12px auto;
+}
+/* In schematics grid, keep fluid tiles */
+.grid .thumb{
+  max-width:none;
+  margin:0;
+}
 """.strip() + "\n", encoding="utf-8")
 
 def _load_header() -> str:
@@ -238,7 +256,6 @@ def main():
     except Exception:
         tb = traceback.format_exc()
         print("[gen][ERROR]\n" + tb, file=sys.stderr)
-        # Always write an index.html so Pages can deploy
         OUT_HTML.write_text(_build_error(_h(tb)), encoding="utf-8")
         print("[gen] error page written")
 
